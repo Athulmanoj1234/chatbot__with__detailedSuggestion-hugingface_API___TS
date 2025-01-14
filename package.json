@@ -1,0 +1,25 @@
+{
+  "name": "chatbot-machine-task",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@huggingface/inference": "^2.8.1",
+    "dotenv": "^16.4.7",
+    "huggingface": "^1.4.0",
+    "openai": "^4.78.1",
+    "readline-sync": "^1.4.10"
+  }
+}
