@@ -34,7 +34,7 @@ const stream = client.chatCompletionStream({
 			content: `${questionQuery} and provide three ideas in numbers`
 		}
 	],
-	max_tokens: 500 
+	max_tokens: 500  
 }); 
 
 for await (const chunk of stream) {
@@ -47,15 +47,20 @@ for await (const chunk of stream) {
 }
 
 let newPrompts = prompts.join("").split("\n");  //the words in array was separated in comas and we have joined each word in array to a string an dwe have split the string in each line and each line have been stored into different indexas different elements
-const filteredMethods = newPrompts.filter((line: String)=> 
+//console.log(newPrompts);
+
+const toBeFiltered = newPrompts.map((prompt: string)=> {
+    return prompt.replace(/['**"]/g, "");
+});
+
+const filteredMethods = toBeFiltered.filter((line: String)=> 
     line.trim().startsWith("1.") ||  //return string elements in array starts with 1.
     line.trim().startsWith("2.") ||
-    line.trim().startsWith("3."));
+    line.trim().startsWith("3.")); 
 
-//create a new array with no special characters but only clean string    
-console.log(filteredMethods.map((prompt: String)=> {
-   return prompt.replace(/['**"]/g, ""); //removed singlequote(') doublequote(") and asterisks(*) 
-})); 
+console.log(filteredMethods);
+
+
 
 //accepting two numbers for returning two elements in string
 const queryIndexOne: number = await new Promise<number>(resolve=> {
@@ -73,7 +78,7 @@ const queryIndexTwo: number = await new Promise<number>(resolve=> {
 
 if(queryIndexOne <= 0 || queryIndexOne > 3 || queryIndexTwo <= 0 || queryIndexTwo > 3){
     console.log("please enter a number between array indexes ie 0 and 3");
-}
+} 
 //filter the elements based on the users query index
 const elementsToDetailed: string[] = filteredMethods.filter((query: string)=> {
     return query.startsWith(`${queryIndexOne}.`) || query.startsWith(`${queryIndexTwo}.`);
@@ -85,10 +90,10 @@ const firstSuggestion: string = elementsToDetailed[0];
 const secondSuggestion: string = elementsToDetailed[1];
 //console.log("this is first suggestion input:" + firstSuggestion + "this is second suggestion input:" + secondSuggestion);
 
-//creating second chat completion stream for detailed query suggestions
+//creating second chat completion stream for detailed query suggestions 
 const stream2 = client.chatCompletionStream({
 	model: "google/gemma-2-2b-it",
-	messages: [
+	messages: [ 
 		{
 			role: "user",
 			content: `provide detialed suggestion for these two queries query one is ${firstSuggestion} and query two is ${secondSuggestion} and answer these queries in two numbers ie no 1 and no 2`
